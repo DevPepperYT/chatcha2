@@ -1,217 +1,164 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatcha</title>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chatcha</n  ><link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family:'Quicksand',sans-serif;
+      background:linear-gradient(135deg,#0a3d57 30%,#081b2b 70%);
+      color:#00BFFF;
+      display:flex; justify-content:center; align-items:flex-start;
+      padding:20px; min-height:100vh;
+    }
+    .container {
+      width:100%; max-width:1000px;
+      background:#0d2a4d; border-radius:10px;
+      box-shadow:0 4px 10px rgba(0,0,0,0.5);
+      overflow:hidden;
+    }
+    h1 { text-align:center; padding:20px; font-size:2.5em; text-shadow:2px 2px 8px rgba(0,0,0,0.7); }
 
-        body {
-            font-family: 'Quicksand', sans-serif;
-            color: #00BFFF;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: center;
-            background-color: #081b2b;
-            background-image: linear-gradient(135deg, #0a3d57 30%, #081b2b 70%);
-            overflow: hidden;
-        }
+    /* Profile Settings */
+    .profile-settings {
+      display:flex; align-items:center; gap:10px;
+      padding:0 20px 20px;
+    }
+    .profile-settings input[type=text] {
+      flex:1; padding:10px; border:none; border-radius:8px;
+      font-size:1em;
+    }
+    .profile-settings label {
+      padding:10px 15px; background:#00BFFF; color:#fff;
+      border-radius:8px; cursor:pointer; transition:background 0.3s;
+    }
+    .profile-settings label:hover { background:#1E90FF; }
+    .profile-settings input[type=file] { display:none; }
+    .profile-settings img {
+      width:60px; height:60px; border-radius:50%;
+      box-shadow:0 2px 5px rgba(0,0,0,0.5);
+    }
 
-        .container {
-            width: 100%;
-            max-width: 800px;
-            padding: 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
-            background-color: #0d2a4d;
-        }
+    /* Chat Box */
+    .chatbox { background:#081b2b; padding:15px; display:flex; flex-direction:column; }
+    .messages {
+      flex:1; max-height:60vh; overflow-y:auto; margin-bottom:15px;
+    }
+    .message {
+      display:flex; align-items:flex-start; gap:10px;
+      background:#1e3c58; padding:10px; border-radius:8px;
+      margin-bottom:10px; box-shadow:0 2px 4px rgba(0,0,0,0.5);
+    }
+    .message img.profile {
+      width:40px; height:40px; border-radius:50%;
+    }
+    .message-content { color:#fff; }
+    .message-content strong { display:block; margin-bottom:5px; }
+    .message-content img.attachment {
+      max-width:100%; margin-top:8px; border-radius:8px;
+    }
 
-        .container h1 {
-            font-size: 2.5em;
-            font-weight: 500;
-            margin: 10px 0;
-            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
-            text-align: center;
-        }
-
-        .chat-container {
-            width: 100%;
-            max-height: 60vh;
-            overflow-y: auto;
-            margin-bottom: 20px;
-        }
-
-        .message {
-            display: flex;
-            align-items: flex-start;
-            margin: 10px 0;
-            padding: 10px;
-            background-color: #1e3b52;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-        }
-
-        .message img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-
-        .message-content {
-            color: #fff;
-        }
-
-        .message-content p {
-            margin: 5px 0;
-            font-size: 1.1em;
-        }
-
-        .message-content .text {
-            margin-top: 5px;
-        }
-
-        .message img.message-image {
-            max-width: 100px;
-            max-height: 100px;
-            border-radius: 8px;
-            margin-top: 10px;
-        }
-
-        .input-container {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            max-width: 800px;
-        }
-
-        .input-container input,
-        .input-container button,
-        .input-container label {
-            padding: 12px;
-            font-size: 1em;
-            border-radius: 8px;
-            border: none;
-            margin-top: 10px;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-        }
-
-        .input-container input,
-        .input-container button {
-            width: 45%;
-        }
-
-        .input-container label {
-            width: 45%;
-        }
-
-        .input-container button:hover,
-        .input-container label:hover {
-            background-color: #1E90FF;
-            transform: scale(1.05);
-        }
-
-        .input-container input:focus,
-        .input-container button:focus {
-            outline: none;
-            box-shadow: 0 0 10px rgba(0, 191, 255, 1);
-        }
-
-        .input-container input[type="file"] {
-            display: none;
-        }
-    </style>
+    /* Input Area */
+    .input-area { display:flex; align-items:center; gap:10px; }
+    .input-area input[type=text] {
+      flex:1; padding:10px; border:none; border-radius:8px; font-size:1em;
+    }
+    .input-area label, .input-area button {
+      padding:10px 20px; background:#00BFFF; color:#fff;
+      border:none; border-radius:8px; cursor:pointer;
+      transition:background 0.3s;
+    }
+    .input-area label:hover, .input-area button:hover { background:#1E90FF; }
+    .input-area input[type=file] { display:none; }
+  </style>
 </head>
 <body>
-
-    <div class="container">
-        <h1>Chatcha</h1>
-
-        <!-- Profile section -->
-        <div class="input-container">
-            <input type="text" id="username" placeholder="Enter your username" />
-            <label for="pfpInput">Upload PFP</label>
-            <input type="file" id="pfpInput" accept="image/*" />
-        </div>
-
-        <div class="chat-container" id="chatContainer"></div>
-
-        <!-- Message input section -->
-        <div class="input-container">
-            <input type="text" id="messageInput" placeholder="Type your message..." />
-            <button id="sendBtn">Send</button>
-            <label for="imageInput">Attach Image</label>
-            <input type="file" id="imageInput" accept="image/*" />
-        </div>
+  <div class="container">
+    <h1>Chatcha</h1>
+    <div class="profile-settings">
+      <input type="text" id="username" placeholder="Enter username" />
+      <label for="pfpInput">Upload PFP</label>
+      <input type="file" id="pfpInput" accept="image/*" />
+      <img id="profilePic" src="https://via.placeholder.com/60" alt="PFP" />
     </div>
+    <div class="chatbox">
+      <div class="messages" id="messageContainer"></div>
+      <div class="input-area">
+        <input type="text" id="messageInput" placeholder="Type a message..." />
+        <label for="imageInput">Attach Image</label>
+        <input type="file" id="imageInput" accept="image/*" />
+        <button id="sendButton">Send</button>
+      </div>
+    </div>
+  </div>
 
-    <script>
-        const sendBtn = document.getElementById('sendBtn');
-        const messageInput = document.getElementById('messageInput');
-        const chatContainer = document.getElementById('chatContainer');
-        const pfpInput = document.getElementById('pfpInput');
-        const usernameInput = document.getElementById('username');
-        const imageInput = document.getElementById('imageInput');
-        let username = '';
-        let pfpUrl = '';
+  <script>
+    // Load saved username/PFP
+    const usernameInput = document.getElementById('username');
+    const pfpInput = document.getElementById('pfpInput');
+    const profilePic = document.getElementById('profilePic');
+    const savedName = localStorage.getItem('username');
+    const savedPfp = localStorage.getItem('profilePic');
+    if (savedName) usernameInput.value = savedName;
+    if (savedPfp) profilePic.src = savedPfp;
+    usernameInput.oninput = () => localStorage.setItem('username', usernameInput.value);
+    pfpInput.onchange = () => {
+      const file = pfpInput.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = e => { profilePic.src = e.target.result; localStorage.setItem('profilePic', e.target.result); };
+        reader.readAsDataURL(file);
+      }
+    };
 
-        // Handle username and profile picture
-        pfpInput.addEventListener('change', (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    pfpUrl = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
+    // Fetch and render messages
+    const msgContainer = document.getElementById('messageContainer');
+    async function loadMessages() {
+      const res = await fetch('/messages');
+      const messages = await res.json();
+      msgContainer.innerHTML = '';
+      messages.forEach(m => {
+        const div = document.createElement('div'); div.className = 'message';
+        div.innerHTML = `
+          <img class="profile" src="${m.pfp}" alt="PFP">
+          <div class="message-content">
+            <strong>${m.username}</strong>
+            <p>${m.text}</p>
+            ${m.image ? `<img class="attachment" src="${m.image}"/>` : ''}
+          </div>`;
+        msgContainer.appendChild(div);
+      });
+      msgContainer.scrollTop = msgContainer.scrollHeight;
+    }
+
+    // Send message
+    document.getElementById('sendButton').onclick = async () => {
+      const text = document.getElementById('messageInput').value.trim();
+      if (!text && !document.getElementById('imageInput').files[0]) return;
+      const username = usernameInput.value || 'Anonymous';
+      const pfp = profilePic.src;
+      let image = '';
+      if (document.getElementById('imageInput').files[0]) {
+        image = await new Promise(resolve => {
+          const reader = new FileReader();
+          reader.onload = e => resolve(e.target.result);
+          reader.readAsDataURL(document.getElementById('imageInput').files[0]);
         });
+      }
+      await fetch('/message', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({ username, pfp, text, image })
+      });
+      document.getElementById('messageInput').value = '';
+      document.getElementById('imageInput').value = '';
+      loadMessages();
+    };
 
-        usernameInput.addEventListener('input', (event) => {
-            username = event.target.value;
-        });
-
-        sendBtn.addEventListener('click', () => {
-            const messageText = messageInput.value.trim();
-            const imageFile = imageInput.files[0];
-
-            if (messageText || imageFile) {
-                const messageElement = document.createElement('div');
-                messageElement.classList.add('message');
-
-                const profilePic = pfpUrl || 'https://i.postimg.cc/hPtHMykg/1323886286343376946remix-1735709522669.png'; // Default PFP
-
-                messageElement.innerHTML = `
-                    <img src="${profilePic}" alt="Profile Picture">
-                    <div class="message-content">
-                        <p><strong>${username || 'Anonymous'}:</strong></p>
-                        <p class="text">${messageText}</p>
-                    </div>
-                `;
-
-                if (imageFile) {
-                    const imageUrl = URL.createObjectURL(imageFile);
-                    messageElement.querySelector('.message-content').innerHTML += `
-                        <img class="message-image" src="${imageUrl}" alt="Message Image">
-                    `;
-                }
-
-                chatContainer.appendChild(messageElement);
-                messageInput.value = '';
-                imageInput.value = '';
-                chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll to the latest message
-            }
-        });
-    </script>
-
+    // Initialize
+    loadMessages();
+    setInterval(loadMessages, 3000);
+  </script>
 </body>
 </html>
