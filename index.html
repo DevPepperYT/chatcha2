@@ -108,6 +108,7 @@
             font-size: 1.1em;
             color: white;
             transition: background-color 0.3s ease;
+            width: 15%;
         }
 
         .input-area button:hover {
@@ -124,10 +125,23 @@
             border-radius: 8px;
             color: white;
             cursor: pointer;
+            width: 15%;
+            display: inline-block;
+            text-align: center;
         }
 
         .input-area label:hover {
             background-color: #1E90FF;
+        }
+
+        .profile-settings {
+            margin-bottom: 20px;
+        }
+
+        .profile-settings label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 1.2em;
         }
     </style>
 </head>
@@ -135,11 +149,14 @@
     <div class="container">
         <h1>Chatcha</h1>
         
-        <div class="profile">
-            <img id="profilePic" src="https://via.placeholder.com/60" alt="Profile Picture">
-            <div>
+        <div class="profile-settings">
+            <label for="username">Enter Username:</label>
+            <input type="text" id="username" placeholder="Enter Username" value="">
+
+            <div class="profile">
+                <label>Profile Picture:</label>
                 <input type="file" id="fileInput" accept="image/*">
-                <input type="text" id="username" placeholder="Enter Username" value="">
+                <img id="profilePic" src="https://via.placeholder.com/60" alt="Profile Picture">
             </div>
         </div>
 
