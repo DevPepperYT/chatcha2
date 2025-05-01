@@ -1,44 +1,226 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    <title>Chatcha</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chatcha</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family:'Quicksand',sans-serif;
+      background-color:#081b2b;
+      background-image:linear-gradient(135deg,#0a3d57 30%,#081b2b 70%);
+      color:#00BFFF;
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      overflow:hidden;
+    }
+    .container {
+      text-align:center;
+      padding:20px;
+      width:90%; max-width:800px;
+      background:#0d2a4d;
+      border-radius:10px;
+      box-shadow:0 4px 10px rgba(0,0,0,0.5);
+      z-index:10;
+    }
+    .container h1 { font-size:2.5em; font-weight:500; margin-bottom:10px; text-shadow:2px 2px 8px rgba(0,0,0,0.7); }
+    .container p { font-size:1.3em; margin-bottom:20px; text-shadow:2px 2px 8px rgba(0,0,0,0.7); }
+    .server-card {
+      display:flex; align-items:center;
+      background:#081b2b;
+      padding:15px;
+      border-radius:10px;
+      margin-bottom:20px;
+      box-shadow:0 4px 10px rgba(0,0,0,0.5);
+    }
+    .server-card img { width:50px; height:50px; border-radius:50%; margin-right:15px; }
+    .server-card div { text-align:left; }
+    .server-card h3, .server-card p { margin:2px 0; text-shadow:2px 2px 8px rgba(0,0,0,0.7); }
+    .server-card button {
+      margin-left:auto;
+      padding:12px;
+      background:#00BFFF;
+      color:#fff;
+      border:none;
+      border-radius:8px;
+      cursor:pointer;
+      font-size:1em;
+      transition:background 0.3s;
+    }
+    .server-card button:hover { background:#1E90FF; }
+    .menu-button {
+      padding:12px 20px;
+      background:#00BFFF;
+      color:#fff;
+      border:none;
+      border-radius:8px;
+      cursor:pointer;
+      font-size:1.2em;
+      text-shadow:1px 1px 4px rgba(0,0,0,0.7);
+      transition:background 0.3s,transform 0.3s;
+    }
+    .menu-button:hover { background:#1E90FF; transform:scale(1.05); }
+
+    /* Chat UI */
+    .chat-container {
+      position:absolute;
+      top:50%; left:50%;
+      transform:translate(-50%, -50%);
+      width:90%; max-width:800px;
+      height:80vh;
+      background:#0d2a4d;
+      border-radius:10px;
+      box-shadow:0 4px 10px rgba(0,0,0,0.5);
+      display:flex;
+      flex-direction:column;
+      opacity:0; visibility:hidden;
+      transition:opacity 1s ease,visibility 1s ease;
+      overflow:hidden;
+    }
+    .chat-header {
+      padding:15px;
+      background:#0a3d57;
+      text-align:center;
+      font-size:1.5em;
+      font-weight:500;
+      text-shadow:2px 2px 8px rgba(0,0,0,0.7);
+    }
+    .chat-messages {
+      flex:1;
+      padding:15px;
+      overflow-y:auto;
+      display:flex;
+      flex-direction:column;
+      gap:15px;
+    }
+    .message {
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+    }
+    .message img { width:40px; height:40px; border-radius:50%; }
+    .message-content {
+      background:rgba(0,191,255,0.1);
+      border:1px solid #00BFFF;
+      border-radius:8px;
+      padding:10px;
+      color:#00BFFF;
+      text-shadow:1px 1px 4px rgba(0,0,0,0.7);
+      width:100%;
+    }
+    .message-content img { max-width:100%; margin-top:8px; border-radius:8px; }
+    .chat-input {
+      display:flex;
+      align-items:center;
+      padding:10px;
+      background:#0a3d57;
+      border-top:2px solid #00BFFF;
+      gap:10px;
+    }
+    .chat-input input[type=text] {
+      flex:1;
+      padding:10px;
+      border:none;
+      border-radius:6px;
+      font-size:1em;
+    }
+    .chat-input input[type=file] { color:#fff; }
+    .chat-input button {
+      padding:10px 20px;
+      background:#00BFFF;
+      color:#fff;
+      border:none;
+      border-radius:6px;
+      cursor:pointer;
+      transition:background 0.3s;
+    }
+    .chat-input button:hover { background:#1E90FF; }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Chatcha</h1>
-        <p>Welcome to Chatcha</p>
-
-        <div class="server-card">
-            <img src="https://i.postimg.cc/hPtHMykg/1323886286343376946remix-1735709522669.png" alt="Server Icon">
-            <div>
-                <h3>Chatcha's Server</h3>
-                <p>Join our Chat Server!</p>
-            </div>
-            <a href="https://discord.gg/KPYgmmBZbQ" target="_blank">
-                <button>Join Server</button>
-            </a>
-        </div>
-
-        <div>
-            <button class="menu-button">Start Chatting</button>
-        </div>
+  <div class="container">
+    <h1>Chatcha</h1>
+    <p>Welcome to Chatcha</p>
+    <div class="server-card">
+      <img src="https://i.postimg.cc/hPtHMykg/1323886286343376946remix-1735709522669.png" alt="Server Icon">
+      <div>
+        <h3>Chatcha's Server</h3>
+        <p>Join our Chat Server!</p>
+      </div>
+      <button class="menu-button">Start Chatting</button>
     </div>
-
-    <div class="chat-container">
-        <div class="chat-message">
-            <img src="https://i.postimg.cc/hPtHMykg/1323886286343376946remix-1735709522669.png" alt="User Profile">
-            <div class="message-text">Hello, this is a test message!</div>
-        </div>
-
-        <input type="file" id="file-upload" accept="image/*">
-        <input type="text" id="message-input" placeholder="Type your message here">
-        <button id="send-button">Send</button>
+  </div>
+  <div class="chat-container">
+    <div class="chat-header">Chatcha</div>
+    <div class="chat-messages" id="chatMessages"></div>
+    <div class="chat-input">
+      <input type="text" id="username" placeholder="Your name" required>
+      <input type="file" id="pfpInput" accept="image/*">
+      <input type="file" id="imageInput" accept="image/*">
+      <input type="text" id="msgInput" placeholder="Type a message..." required>
+      <button id="sendBtn">Send</button>
     </div>
+  </div>
+  <script>
+    const menuBtn = document.querySelector('.menu-button');
+    const containerEl = document.querySelector('.container');
+    const chatEl = document.querySelector('.chat-container');
+    const chatMessages = document.getElementById('chatMessages');
+    const sendBtn = document.getElementById('sendBtn');
+    const msgInput = document.getElementById('msgInput');
+    const usernameInput = document.getElementById('username');
+    const pfpInput = document.getElementById('pfpInput');
+    const imageInput = document.getElementById('imageInput');
 
-    <script src="script.js"></script>
+    let userPfp = '';
+
+    menuBtn.addEventListener('click', () => {
+      const file = pfpInput.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => { userPfp = reader.result; };
+        reader.readAsDataURL(file);
+      }
+      containerEl.style.opacity = 0;
+      containerEl.style.visibility = 'hidden';
+      setTimeout(() => {
+        chatEl.style.opacity = 1;
+        chatEl.style.visibility = 'visible';
+      }, 500);
+    });
+
+    function addMessage(username, text, pfp, imgSrc) {
+      const msg = document.createElement('div'); msg.className = 'message';
+      const avatar = document.createElement('img'); avatar.src = pfp || 'https://i.postimg.cc/hPtHMykg/1323886286343376946remix-1735709522669.png';
+      const content = document.createElement('div'); content.className = 'message-content';
+      content.innerHTML = `<strong>${username}</strong><div>${text}</div>`;
+      if (imgSrc) {
+        const img = document.createElement('img'); img.src = imgSrc; content.appendChild(img);
+      }
+      msg.append(avatar, content);
+      chatMessages.appendChild(msg);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    sendBtn.addEventListener('click', () => {
+      const username = usernameInput.value.trim();
+      const text = msgInput.value.trim();
+      const imgFile = imageInput.files[0];
+      let imgSrc = '';
+      if (imgFile) {
+        const reader = new FileReader();
+        reader.onload = () => { imgSrc = reader.result; addMessage(username, text, userPfp, imgSrc); };
+        reader.readAsDataURL(imgFile);
+      } else {
+        addMessage(username, text, userPfp, '');
+      }
+      msgInput.value = '';
+      imageInput.value = '';
+    });
+  </script>
 </body>
 </html>
