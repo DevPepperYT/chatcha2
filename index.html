@@ -1,23 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Chat App</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chatcha</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Simple Chat</h1>
-  <form id="loginForm">
-    <input type="text" id="username" placeholder="Username" required>
-    <input type="file" id="pfp" accept="image/*" required>
-    <button type="submit">Join Chat</button>
-  </form>
-
-  <div id="chat" style="display:none;">
-    <div id="messages"></div>
-    <form id="msgForm">
-      <input type="text" id="msgInput" placeholder="Type a message..." required>
+  <div class="container">
+    <h1>Chatcha</h1>
+    <form id="chatForm" enctype="multipart/form-data">
+      <input type="text" id="username" placeholder="Username" required />
+      <input type="file" id="pfp" accept="image/*" />
+      <input type="text" id="message" placeholder="Type a message" required />
+      <input type="file" id="image" accept="image/*" />
       <button type="submit">Send</button>
     </form>
+    <div id="messages"></div>
   </div>
 
   <script src="script.js"></script>
