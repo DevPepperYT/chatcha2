@@ -1,43 +1,47 @@
-let currentUser = null;
-let pfpData = "";
+const menuButton = document.querySelector('.menu-button');
+const container = document.querySelector('.container');
+const chatContainer = document.querySelector('.chat-container');
+const sendButton = document.querySelector('#send-button');
+const messageInput = document.querySelector('#message-input');
+const fileUpload = document.querySelector('#file-upload');
 
-document.getElementById("loginForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const username = document.getElementById("username").value;
-  const file = document.getElementById("pfp").files[0];
-  
-  const reader = new FileReader();
-  reader.onload = () => {
-    pfpData = reader.result;
-    currentUser = { username, pfp: pfpData };
-    document.getElementById("loginForm").style.display = "none";
-    document.getElementById("chat").style.display = "block";
-    loadMessages();
-  };
-  reader.readAsDataURL(file);
+menuButton.addEventListener('click', () => {
+    container.style.opacity = 0;
+    container.style.visibility = 'hidden';
+    setTimeout(() => {
+        chatContainer.style.opacity = 1;
+        chatContainer.style.visibility = 'visible';
+    }, 1000);
 });
 
-document.getElementById("msgForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const msg = document.getElementById("msgInput").value;
-  await fetch("/send", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ user: currentUser, message: msg }),
-  });
-  document.getElementById("msgInput").value = "";
-  loadMessages();
-});
+sendButton.addEventListener('click', () => {
+    const messageText = messageInput.value;
+    const file = fileUpload.files[0];
 
-async function loadMessages() {
-  const res = await fetch("/messages");
-  const data = await res.json();
-  const container = document.getElementById("messages");
-  container.innerHTML = "";
-  data.forEach(({ user, message }) => {
-    const div = document.createElement("div");
-    div.className = "message";
-    div.innerHTML = `<img src="${user.pfp}"><strong>${user.username}:</strong> ${message}`;
-    container.appendChild(div);
-  });
-}
+    if (messageText.trim() || file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const newMessage = document.createElement('div');
+            newMessage.classList.add('chat-message');
+            
+            if (file) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                newMessage.appendChild(img);
+            }
+
+            const text = document.createElement('div');
+            text.classList.add('message-text');
+            text.textContent = messageText;
+            newMessage.appendChild(text);
+
+            chatContainer.appendChild(newMessage);
+            messageInput.value = '';
+            fileUpload.value = '';
+        };
+        
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    }
+});
