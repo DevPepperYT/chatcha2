@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatcha</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         * {
@@ -16,22 +17,21 @@
             color: #00BFFF;
             height: 100vh;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            justify-content: flex-start;
             align-items: center;
-            position: relative;
             background-color: #081b2b;
             background-image: linear-gradient(135deg, #0a3d57 30%, #081b2b 70%);
+            overflow: hidden;
         }
 
         .container {
-            text-align: center;
-            padding: 20px;
             width: 100%;
-            max-width: 1000px;
-            z-index: 10;
+            max-width: 800px;
+            padding: 20px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
             border-radius: 10px;
-            transition: opacity 1s ease, visibility 1s ease;
+            background-color: #0d2a4d;
         }
 
         .container h1 {
@@ -39,199 +39,179 @@
             font-weight: 500;
             margin: 10px 0;
             text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+            text-align: center;
         }
 
-        .profile {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .profile img {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            margin-right: 20px;
-        }
-
-        .profile input[type="file"] {
-            display: none;
-        }
-
-        .chatbox {
+        .chat-container {
             width: 100%;
-            max-width: 800px;
-            padding: 10px;
-            background-color: #0d2a4d;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-            margin-bottom: 20px;
-        }
-
-        .messages {
-            max-height: 300px;
+            max-height: 60vh;
             overflow-y: auto;
             margin-bottom: 20px;
         }
 
         .message {
-            background-color: #1e3c58;
-            color: #00BFFF;
-            border-radius: 8px;
+            display: flex;
+            align-items: flex-start;
+            margin: 10px 0;
             padding: 10px;
-            margin-bottom: 10px;
-            text-align: left;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            background-color: #1e3b52;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
         }
 
-        .input-area {
+        .message img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .message-content {
+            color: #fff;
+        }
+
+        .message-content p {
+            margin: 5px 0;
+            font-size: 1.1em;
+        }
+
+        .message-content .text {
+            margin-top: 5px;
+        }
+
+        .message img.message-image {
+            max-width: 100px;
+            max-height: 100px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .input-container {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            width: 100%;
+            max-width: 800px;
         }
 
-        .input-area input {
-            width: 80%;
-            padding: 10px;
-            border-radius: 8px;
-            border: none;
-            margin-right: 10px;
+        .input-container input,
+        .input-container button,
+        .input-container label {
+            padding: 12px;
             font-size: 1em;
-        }
-
-        .input-area button {
-            padding: 10px 20px;
-            background-color: #00BFFF;
             border-radius: 8px;
             border: none;
+            margin-top: 10px;
             cursor: pointer;
-            font-size: 1.1em;
-            color: white;
-            transition: background-color 0.3s ease;
-            width: 15%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
         }
 
-        .input-area button:hover {
+        .input-container input,
+        .input-container button {
+            width: 45%;
+        }
+
+        .input-container label {
+            width: 45%;
+        }
+
+        .input-container button:hover,
+        .input-container label:hover {
             background-color: #1E90FF;
+            transform: scale(1.05);
         }
 
-        .input-area input[type="file"] {
+        .input-container input:focus,
+        .input-container button:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 191, 255, 1);
+        }
+
+        .input-container input[type="file"] {
             display: none;
-        }
-
-        .input-area label {
-            background-color: #00BFFF;
-            padding: 10px;
-            border-radius: 8px;
-            color: white;
-            cursor: pointer;
-            width: 15%;
-            display: inline-block;
-            text-align: center;
-        }
-
-        .input-area label:hover {
-            background-color: #1E90FF;
-        }
-
-        .profile-settings {
-            margin-bottom: 20px;
-        }
-
-        .profile-settings label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 1.2em;
         }
     </style>
 </head>
 <body>
+
     <div class="container">
         <h1>Chatcha</h1>
-        
-        <div class="profile-settings">
-            <label for="username">Enter Username:</label>
-            <input type="text" id="username" placeholder="Enter Username" value="">
 
-            <div class="profile">
-                <label>Profile Picture:</label>
-                <input type="file" id="fileInput" accept="image/*">
-                <img id="profilePic" src="https://via.placeholder.com/60" alt="Profile Picture">
-            </div>
+        <!-- Profile section -->
+        <div class="input-container">
+            <input type="text" id="username" placeholder="Enter your username" />
+            <label for="pfpInput">Upload PFP</label>
+            <input type="file" id="pfpInput" accept="image/*" />
         </div>
 
-        <div class="chatbox">
-            <div class="messages" id="messageContainer"></div>
+        <div class="chat-container" id="chatContainer"></div>
 
-            <div class="input-area">
-                <input type="text" id="messageInput" placeholder="Type a message...">
-                <label for="fileInput">Attach Image</label>
-                <button id="sendButton">Send</button>
-            </div>
+        <!-- Message input section -->
+        <div class="input-container">
+            <input type="text" id="messageInput" placeholder="Type your message..." />
+            <button id="sendBtn">Send</button>
+            <label for="imageInput">Attach Image</label>
+            <input type="file" id="imageInput" accept="image/*" />
         </div>
     </div>
 
     <script>
-        // Load saved user data
-        const username = localStorage.getItem("username");
-        const profilePic = localStorage.getItem("profilePic");
+        const sendBtn = document.getElementById('sendBtn');
+        const messageInput = document.getElementById('messageInput');
+        const chatContainer = document.getElementById('chatContainer');
+        const pfpInput = document.getElementById('pfpInput');
+        const usernameInput = document.getElementById('username');
+        const imageInput = document.getElementById('imageInput');
+        let username = '';
+        let pfpUrl = '';
 
-        if (username) {
-            document.getElementById("username").value = username;
-        }
-        if (profilePic) {
-            document.getElementById("profilePic").src = profilePic;
-        }
-
-        const fileInput = document.getElementById("fileInput");
-        const sendButton = document.getElementById("sendButton");
-        const messageInput = document.getElementById("messageInput");
-        const messageContainer = document.getElementById("messageContainer");
-        const usernameInput = document.getElementById("username");
-
-        // Event listener to handle profile picture upload
-        fileInput.addEventListener("change", function() {
-            const file = fileInput.files[0];
+        // Handle username and profile picture
+        pfpInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(event) {
-                    const imgSrc = event.target.result;
-                    document.getElementById("profilePic").src = imgSrc;
-                    localStorage.setItem("profilePic", imgSrc);
+                reader.onload = function(e) {
+                    pfpUrl = e.target.result;
                 };
                 reader.readAsDataURL(file);
             }
         });
 
-        // Save username to localStorage
-        usernameInput.addEventListener("input", function() {
-            localStorage.setItem("username", usernameInput.value);
+        usernameInput.addEventListener('input', (event) => {
+            username = event.target.value;
         });
 
-        // Handle sending message with optional image
-        sendButton.addEventListener("click", function() {
-            const messageText = messageInput.value;
-            const user = usernameInput.value || "Anonymous";
-            const profilePicSrc = document.getElementById("profilePic").src;
-            const imageAttachment = fileInput.files[0] ? URL.createObjectURL(fileInput.files[0]) : null;
+        sendBtn.addEventListener('click', () => {
+            const messageText = messageInput.value.trim();
+            const imageFile = imageInput.files[0];
 
-            if (messageText.trim() !== "") {
-                // Add message to message container
-                const messageDiv = document.createElement("div");
-                messageDiv.classList.add("message");
-                messageDiv.innerHTML = `
-                    <strong>${user}</strong><br>
-                    <img src="${profilePicSrc}" alt="PFP" width="30" style="border-radius: 50%;"> 
-                    ${messageText}
-                    ${imageAttachment ? `<br><img src="${imageAttachment}" width="100">` : ""}
+            if (messageText || imageFile) {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message');
+
+                const profilePic = pfpUrl || 'https://i.postimg.cc/hPtHMykg/1323886286343376946remix-1735709522669.png'; // Default PFP
+
+                messageElement.innerHTML = `
+                    <img src="${profilePic}" alt="Profile Picture">
+                    <div class="message-content">
+                        <p><strong>${username || 'Anonymous'}:</strong></p>
+                        <p class="text">${messageText}</p>
+                    </div>
                 `;
-                messageContainer.appendChild(messageDiv);
-                messageInput.value = "";
 
-                // Scroll to the latest message
-                messageContainer.scrollTop = messageContainer.scrollHeight;
+                if (imageFile) {
+                    const imageUrl = URL.createObjectURL(imageFile);
+                    messageElement.querySelector('.message-content').innerHTML += `
+                        <img class="message-image" src="${imageUrl}" alt="Message Image">
+                    `;
+                }
+
+                chatContainer.appendChild(messageElement);
+                messageInput.value = '';
+                imageInput.value = '';
+                chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll to the latest message
             }
         });
     </script>
+
 </body>
 </html>
